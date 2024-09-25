@@ -2,7 +2,7 @@
 
 Laravel Ownerable, developed by Pelton Solutions, can be used to help make certain classes owned by other classes.
 For example, in a tenant system, where a BlogPost might be owned by an Account. It automatically assigns the owner
-and requires the owner when the owned class is queried. - test
+and requires the owner when the owned class is queried.
 
 ## Install
 

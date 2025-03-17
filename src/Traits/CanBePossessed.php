@@ -26,7 +26,7 @@ trait CanBePossessed {
 	}
 
 	public static function getOwnerClassname():string {
-		return config('ownerable.owner');
+		return (string)config('ownerable.owner');
 	}
 
 	public function hasOwner(): bool {

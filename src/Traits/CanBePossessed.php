@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use PeltonSolutions\LaravelOwnerable\Contracts\CanHavePossessions;
 use PeltonSolutions\LaravelOwnerable\Observers\CanBePossessedObserver;
 
-trait CanBePossessed {
-
-	protected static function boot(): void {
+trait CanBePossessed
+{
+	protected static function boot(): void
+	{
 		parent::boot();
 		self::observe(CanBePossessedObserver::class);
 	}
 
-	protected static function booted(): void {
+	protected static function booted(): void
+	{
 		static::addGlobalScope('owner', function (Builder $query) {
 			if (($ownerClassname = self::getOwnerClassname()) && ($owner = $ownerClassname::getCurrent()) && $owner instanceof CanHavePossessions) {
 				$query->where('ownerable_id', $owner->getKey());
@@ -25,16 +27,18 @@ trait CanBePossessed {
 		});
 	}
 
-	public static function getOwnerClassname():string {
+	public static function getOwnerClassname(): string
+	{
 		return (string)config('ownerable.owner');
 	}
 
-	public function hasOwner(): bool {
-		return (bool) $this->ownerable_id;
+	public function hasOwner(): bool
+	{
+		return (bool)$this->ownerable_id;
 	}
 
-	public function ownerable(): MorphTo {
+	public function ownerable(): MorphTo
+	{
 		return $this->morphTo();
 	}
-
 }

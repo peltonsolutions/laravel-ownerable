@@ -2,6 +2,6 @@
 
 return [
 
-		'owner' => env('PELTON_SOLUTIONS_OWNER_CLASS'),
+	'owner' => env('PELTON_SOLUTIONS_OWNER_CLASS'),
 
 ];

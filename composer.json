@@ -20,8 +20,10 @@
     "laravel/framework": "^11.0"
   },
   "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.94",
     "pestphp/pest": "^2.33",
-    "pestphp/pest-plugin-livewire": "^2.1"
+    "pestphp/pest-plugin-livewire": "^2.1",
+    "roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {

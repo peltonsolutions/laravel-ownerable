@@ -10,5 +10,5 @@ interface CanBePossessed
 
 	public function hasOwner(): bool;
 
-	public static function getOwnerClassname(): string;
+	public static function getOwnerClassname(): ?string;
 }

@@ -27,9 +27,9 @@ trait CanBePossessed
 		});
 	}
 
-	public static function getOwnerClassname(): string
+	public static function getOwnerClassname(): ?string
 	{
-		return (string)config('ownerable.owner');
+		return config('ownerable.owner') ?: null;
 	}
 
 	public function hasOwner(): bool

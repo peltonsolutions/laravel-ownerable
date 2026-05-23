@@ -111,6 +111,8 @@ BlogPost::withoutGlobalScope('owner')->get();
 composer test
 ```
 
+The test suite uses [Pest](https://pestphp.com/) and covers the `CanBePossessed` trait and observer — including owner resolution, query scoping, and auto-association on creation.
+
 ## Security
 
 If you discover any security-related issues, please email [security@peltonsolutions.com](mailto:security@peltonsolutions.com) instead of using the issue tracker.

@@ -9,14 +9,10 @@ use PeltonSolutions\LaravelOwnerable\Observers\CanBePossessedObserver;
 
 trait CanBePossessed
 {
-	protected static function boot(): void
-	{
-		parent::boot();
-		self::observe(CanBePossessedObserver::class);
-	}
-
 	protected static function booted(): void
 	{
+		self::observe(CanBePossessedObserver::class);
+
 		static::addGlobalScope('owner', function (Builder $query) {
 			if (($ownerClassname = self::getOwnerClassname()) && ($owner = $ownerClassname::getCurrent()) && $owner instanceof CanHavePossessions) {
 				$query->where('ownerable_id', $owner->getKey());

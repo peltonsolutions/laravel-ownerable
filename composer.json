@@ -23,7 +23,7 @@
     "friendsofphp/php-cs-fixer": "^3.94",
     "pestphp/pest": "^2.33",
     "pestphp/pest-plugin-livewire": "^2.1",
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest@dev"
   },
   "autoload": {
     "psr-4": {
@@ -52,6 +52,6 @@
       ]
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true
 }

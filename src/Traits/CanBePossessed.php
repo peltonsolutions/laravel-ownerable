@@ -14,11 +14,13 @@ trait CanBePossessed
 		self::observe(CanBePossessedObserver::class);
 
 		static::addGlobalScope('owner', function (Builder $query) {
+			$table = $query->getModel()->getTable();
+
 			if (($ownerClassname = self::getOwnerClassname()) && ($owner = $ownerClassname::getCurrent()) && $owner instanceof CanHavePossessions) {
-				$query->where('ownerable_id', $owner->getKey());
-				$query->where('ownerable_type', get_class($owner));
+				$query->where("{$table}.ownerable_id", $owner->getKey());
+				$query->where("{$table}.ownerable_type", get_class($owner));
 			} else {
-				$query->where('ownerable_id', null);
+				$query->where("{$table}.ownerable_id", null);
 			}
 		});
 	}

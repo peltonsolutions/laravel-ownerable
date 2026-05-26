@@ -16,7 +16,9 @@ test('global scope filters by ownerable_id and ownerable_type when owner is conf
     FakeOwner::setCurrent($owner);
 
     $calls = [];
+    $model = new class { public function getTable(): string { return 'fake_ownerables'; } };
     $builder = $this->createMock(Builder::class);
+    $builder->method('getModel')->willReturn($model);
     $builder->method('where')->willReturnCallback(function ($col, $val) use (&$calls) {
         $calls[] = [$col, $val];
     });
@@ -24,8 +26,8 @@ test('global scope filters by ownerable_id and ownerable_type when owner is conf
     (ScopedFakeOwnerable::$capturedScope)($builder);
 
     expect($calls)->toBe([
-        ['ownerable_id', $owner->getKey()],
-        ['ownerable_type', FakeOwner::class],
+        ['fake_ownerables.ownerable_id', $owner->getKey()],
+        ['fake_ownerables.ownerable_type', FakeOwner::class],
     ]);
 });
 
@@ -33,14 +35,16 @@ test('global scope filters to ownerable_id null when no owner class is configure
     config(['ownerable.owner' => null]);
 
     $calls = [];
+    $model = new class { public function getTable(): string { return 'fake_ownerables'; } };
     $builder = $this->createMock(Builder::class);
+    $builder->method('getModel')->willReturn($model);
     $builder->method('where')->willReturnCallback(function ($col, $val) use (&$calls) {
         $calls[] = [$col, $val];
     });
 
     (ScopedFakeOwnerable::$capturedScope)($builder);
 
-    expect($calls)->toBe([['ownerable_id', null]]);
+    expect($calls)->toBe([['fake_ownerables.ownerable_id', null]]);
 });
 
 test('global scope filters to ownerable_id null when getCurrent returns null', function () {
@@ -48,12 +52,14 @@ test('global scope filters to ownerable_id null when getCurrent returns null', f
     FakeOwner::setCurrent(null);
 
     $calls = [];
+    $model = new class { public function getTable(): string { return 'fake_ownerables'; } };
     $builder = $this->createMock(Builder::class);
+    $builder->method('getModel')->willReturn($model);
     $builder->method('where')->willReturnCallback(function ($col, $val) use (&$calls) {
         $calls[] = [$col, $val];
     });
 
     (ScopedFakeOwnerable::$capturedScope)($builder);
 
-    expect($calls)->toBe([['ownerable_id', null]]);
+    expect($calls)->toBe([['fake_ownerables.ownerable_id', null]]);
 });

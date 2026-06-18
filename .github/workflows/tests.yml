@@ -1,0 +1,40 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          coverage: none
+
+      - name: Configure Composer GitHub auth
+        env:
+          GITHUB_PAT: ${{ secrets.PELTON_SOLUTIONS_GITHUB_PAT }}
+        run: composer config --global --auth github-oauth.github.com "$GITHUB_PAT"
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run tests
+        run: composer test

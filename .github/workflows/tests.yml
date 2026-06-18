@@ -28,11 +28,6 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Configure Composer GitHub auth
-        env:
-          GITHUB_PAT: ${{ secrets.PELTON_SOLUTIONS_GITHUB_PAT }}
-        run: composer config --global --auth github-oauth.github.com "$GITHUB_PAT"
-
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 

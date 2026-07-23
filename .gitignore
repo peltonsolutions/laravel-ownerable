@@ -50,4 +50,6 @@ Thumbs.db
 /vendor
 composer.lock
 /.php-cs-fixer.cache
-/.claude
+/.claude/settings.local.json
+/.claude/worktrees/
+/.claude/scheduled_tasks.lock

@@ -105,13 +105,36 @@ Use `withoutGlobalScope` when you need to query across all owners:
 BlogPost::withoutGlobalScope('owner')->get();
 ```
 
+### Permanent deletes by query
+
+Models that use `CanBePossessed` get an `OwnerableBuilder`, whose `forceDelete()` on a query respects the owner scope, as `delete()` does:
+
+- Run for the current owner, it deletes only that owner's matching rows, soft-deleted ones included.
+- With no current owner, it deletes only rows that have no owner, as `delete()` does.
+- After `withoutGlobalScope('owner')` or `withoutGlobalScopes()`, it deletes across owners, as before.
+
+A record's own `$post->forceDelete()` deletes that record, as before.
+
+### Models with their own builder
+
+A model that sets its own Eloquent builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must have that builder extend `PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder`. Otherwise building a query for it throws a `LogicException`. A model that overrides `newEloquentBuilder()` itself must return an `OwnerableBuilder` too; the package does not check that case.
+
+```php
+use PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder;
+
+class BlogPostBuilder extends OwnerableBuilder
+{
+    // ...
+}
+```
+
 ## Testing
 
 ```bash
 composer test
 ```
 
-The test suite uses [Pest](https://pestphp.com/) and covers the `CanBePossessed` trait and observer — including owner resolution, query scoping, and auto-association on creation.
+The test suite uses [Pest](https://pestphp.com/) and covers the `CanBePossessed` trait and observer — including owner resolution, query scoping, and auto-association on creation — and, against an in-memory SQLite database, which rows a query-level `forceDelete()` reaches.
 
 ## Security
 

@@ -31,7 +31,8 @@ trait CanBePossessed
 	 *
 	 * A model with its own builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must
 	 * have that builder extend OwnerableBuilder, and is refused with a LogicException otherwise. A model that overrides this method itself must return an
-	 * OwnerableBuilder too; that case cannot be checked from here.
+	 * OwnerableBuilder too. PHP checks that only when the override declares `: OwnerableBuilder`; an override with another
+	 * return type, or none, is not checked.
 	 *
 	 * @param \Illuminate\Database\Query\Builder $query
 	 */

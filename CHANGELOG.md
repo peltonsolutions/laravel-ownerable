@@ -8,6 +8,12 @@
 - **Behaviour change, hence a minor version:** with no current owner, a query-level `forceDelete()` now deletes only rows that have no owner, as `delete()` already did. Code that runs with no current owner and means to delete across owners must say so with `withoutGlobalScope('owner')` or `withoutGlobalScopes()`, which keep working as before. A relation's `forceDelete()` (for example `$post->comments()->forceDelete()`) on an owned model is constrained the same way.
 - **A model with its own Eloquent builder** must have it extend `OwnerableBuilder`, or building a query for that model throws a `LogicException`. See "Models with their own builder" in the README.
 
+### Upgrading
+
+- **A model that overrides `newEloquentBuilder()`** should declare `: OwnerableBuilder` and return one. An override with another return type, or none, still loads and is not checked; if it returns another builder, that model's query-level `forceDelete()` behaves as before. See "Models with their own builder" in the README.
+- **A model that also uses another trait defining `newEloquentBuilder()`** fails to load with a trait collision error until the model resolves the collision.
+- **Pruning:** `model:prune` usually runs with no current owner. On a model that uses `CanBePossessed`, `SoftDeletes` and `MassPrunable`, it now prunes only rows that have no owner, unless `prunable()` removes the owner scope with `withoutGlobalScope('owner')`.
+
 ### Unchanged
 
 - A record's own `$model->forceDelete()` deletes that record.

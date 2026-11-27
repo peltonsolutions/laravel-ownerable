@@ -117,7 +117,9 @@ A record's own `$post->forceDelete()` deletes that record, as before.
 
 ### Models with their own builder
 
-A model that sets its own Eloquent builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must have that builder extend `PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder`. Otherwise building a query for it throws a `LogicException`. A model that overrides `newEloquentBuilder()` itself must return an `OwnerableBuilder` too; the package does not check that case.
+A model that sets its own Eloquent builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must have that builder extend `PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder`. Otherwise building a query for it throws a `LogicException`. A model that overrides `newEloquentBuilder()` itself must return an `OwnerableBuilder` too. PHP checks this only when the override declares `: OwnerableBuilder` as its return type: returning another builder then throws a `TypeError`. An override with any other return type, or none, is not checked, and if it returns another builder, a query-level `forceDelete()` on that model does not respect the owner scope.
+
+A model that also uses another trait defining `newEloquentBuilder()` fails to load with a trait collision error, and the model must resolve the collision itself.
 
 ```php
 use PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder;

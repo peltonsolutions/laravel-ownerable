@@ -53,7 +53,7 @@ afterEach(function (): void {
 	Model::unsetConnectionResolver();
 });
 
-/** A note owned by $owner (or by nobody), written without the observer or any scope. */
+/** A note owned by $owner (or by nobody). The observer runs but changes nothing: either the note has an owner, or none is current yet. */
 function fdNote(?Tenant $owner, string $name = 'P', bool $trashed = false, ?string $parent = null): string
 {
 	$note = new OwnedNote();

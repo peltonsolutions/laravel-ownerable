@@ -117,7 +117,10 @@ A record's own `$post->forceDelete()` deletes that record, as before.
 
 ### Models with their own builder
 
-A model that sets its own Eloquent builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must have that builder extend `PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder`. Otherwise building a query for it throws a `LogicException`. A model that overrides `newEloquentBuilder()` itself must return an `OwnerableBuilder` too. PHP checks this only when the override declares `: OwnerableBuilder` as its return type: returning another builder then throws a `TypeError`. An override with any other return type, or none, is not checked, and if it returns another builder, a query-level `forceDelete()` on that model does not respect the owner scope.
+A model that sets its own Eloquent builder (a `$builder` property, or `#[UseEloquentBuilder]` on Laravel 12 and later) must have that builder extend `PeltonSolutions\LaravelOwnerable\Builders\OwnerableBuilder`. Otherwise building a query for it throws a `LogicException`. A model that overrides `newEloquentBuilder()` itself must return an `OwnerableBuilder` too. How PHP checks this depends on where the model gets `CanBePossessed`:
+
+- **The model's own class uses the trait:** PHP checks the override only when it declares `: OwnerableBuilder` as its return type, and returning another builder then throws a `TypeError`. An override with any other return type, or none, loads and is not checked. If it returns another builder, a query-level `forceDelete()` on that model does not respect the owner scope.
+- **The model inherits the trait from a parent class:** the override must be compatible with `: OwnerableBuilder`, or the model fails to load.
 
 A model that also uses another trait defining `newEloquentBuilder()` fails to load with a trait collision error, and the model must resolve the collision itself.
 
